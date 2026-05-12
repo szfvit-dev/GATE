@@ -1,0 +1,44 @@
+{
+  "name": "昶青集團 AI-GATE 智慧管理平台",
+  "short_name": "AI-GATE",
+  "description": "昶青集團AI驅動智慧管理平台 - 整合數位資料、風控、路徑規劃等多項智能服務",
+  "start_url": "./index.html",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "background_color": "#0a0e27",
+  "theme_color": "#0a0e27",
+  "lang": "zh-TW",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "./R0.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "./R0.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ],
+  "categories": ["business", "productivity", "utilities"],
+  "shortcuts": [
+    {
+      "name": "數位資料中心",
+      "short_name": "資料中心",
+      "description": "快速開啟數位資料管理平台",
+      "url": "./index.html?app=digidata",
+      "icons": [{ "src": "./app1.png", "sizes": "192x192" }]
+    },
+    {
+      "name": "風控管理中心",
+      "short_name": "風控中心",
+      "description": "快速開啟風險控制系統",
+      "url": "./index.html?app=risk",
+      "icons": [{ "src": "./app2.png", "sizes": "192x192" }]
+    }
+  ]
+}

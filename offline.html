@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>離線模式 - AI-GATE</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Rajdhani', 'Noto Sans TC', sans-serif;
+            min-height: 100vh;
+            background: #0a0e27;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #00ffff;
+            text-align: center;
+            padding: 20px;
+        }
+
+        .offline-container {
+            max-width: 500px;
+        }
+
+        .offline-icon {
+            font-size: 5rem;
+            margin-bottom: 20px;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        h1 {
+            font-size: 2rem;
+            margin-bottom: 15px;
+            text-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
+        }
+
+        p {
+            font-size: 1.1rem;
+            line-height: 1.6;
+            opacity: 0.8;
+            margin-bottom: 30px;
+        }
+
+        .retry-button {
+            background: linear-gradient(135deg, #0064ff 0%, #00ffff 100%);
+            color: white;
+            border: none;
+            padding: 15px 40px;
+            font-size: 1.1rem;
+            font-weight: 700;
+            cursor: pointer;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .retry-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.6);
+        }
+
+        .cached-apps {
+            margin-top: 40px;
+            text-align: left;
+        }
+
+        .cached-apps h2 {
+            font-size: 1.3rem;
+            margin-bottom: 15px;
+            color: #00ffff;
+        }
+
+        .cached-apps ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .cached-apps li {
+            padding: 10px;
+            margin: 5px 0;
+            background: rgba(0, 255, 255, 0.1);
+            border-left: 3px solid #00ffff;
+        }
+    </style>
+</head>
+<body>
+    <div class="offline-container">
+        <div class="offline-icon">📡</div>
+        <h1>目前處於離線模式</h1>
+        <p>
+            無法連接到網路。<br>
+            請檢查您的網路連線後重試。
+        </p>
+        <button class="retry-button" onclick="location.reload()">
+            重新連線
+        </button>
+
+        <div class="cached-apps">
+            <h2>✅ 已快取的資源</h2>
+            <ul>
+                <li>主頁面</li>
+                <li>應用程式圖標</li>
+                <li>基本樣式</li>
+            </ul>
+        </div>
+    </div>
+
+    <script>
+        // 每 5 秒自動檢測網路
+        setInterval(() => {
+            if (navigator.onLine) {
+                location.reload();
+            }
+        }, 5000);
+
+        // 監聽網路狀態變化
+        window.addEventListener('online', () => {
+            location.reload();
+        });
+    </script>
+</body>
+</html>

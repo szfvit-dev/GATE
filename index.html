@@ -1,0 +1,1329 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#0a0e27">
+    <meta name="description" content="昶青集團應用程式入口 - GAI驅動智慧管理平台">
+    <title>昶青集團應用程式入口 - GAI驅動智慧管理平台</title>
+    
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+TC:wght@400;700;900&family=Orbitron:wght@400;700;900&family=Rajdhani:wght@400;600;700&display=swap" rel="stylesheet">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="data:application/json;base64,ewogICJuYW1lIjogIuaYtumdkumbhuWcmCBBSS1HQVRFIiwKICAic2hvcnRfbmFtZSI6ICJBSS1HQVRFIiwKICAic3RhcnRfdXJsIjogIi8iLAogICJkaXNwbGF5IjogInN0YW5kYWxvbmUiLAogICJiYWNrZ3JvdW5kX2NvbG9yIjogIiMwYTBlMjciLAogICJ0aGVtZV9jb2xvciI6ICIjMGEwZTI3IiwKICAiaWNvbnMiOiBbCiAgICB7CiAgICAgICJzcmMiOiAiUjAucG5nIiwKICAgICAgInNpemVzIjogIjE5MngxOTIiLAogICAgICAidHlwZSI6ICJpbWFnZS9wbmciLAogICAgICAicHVycG9zZSI6ICJhbnkgbWFza2FibGUiCiAgICB9LAogICAgewogICAgICAic3JjIjogIlIwLnBuZyIsCiAgICAgICJzaXplcyI6ICI1MTJ4NTEyIiwKICAgICAgInR5cGUiOiAiaW1hZ2UvcG5nIiwKICAgICAgInB1cnBvc2UiOiAiYW55IG1hc2thYmxlIgogICAgfQogIF0sCiAgImRlc2NyaXB0aW9uIjogIuaYtumdkumbhuWcmEFJ5oeA5oWn566h55CG5bmz5Y+wIiwKICAib3JpZW50YXRpb24iOiAicG9ydHJhaXQiCn0=">
+    
+    <!-- Apple Touch Icon -->
+    <link rel="apple-touch-icon" href="R0.png">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Rajdhani', 'Noto Sans TC', sans-serif;
+            min-height: 100vh;
+            background: #0a0e27;
+            position: relative;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+        }
+
+        /* 電路板網格背景 */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* 動態掃描線效果 */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(0, 255, 255, 0.8) 50%, 
+                transparent 100%);
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.8);
+            animation: scanLine 4s linear infinite;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        @keyframes scanLine {
+            0% { top: 0%; }
+            100% { top: 100%; }
+        }
+
+        /* 數位粒子背景 Canvas */
+        #particleCanvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0;
+            pointer-events: none;
+        }
+
+        /* 內容容器 */
+        .content-wrapper {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            max-width: 1400px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        /* 🔥 Logo 容器 - 正 10 邊形 */
+        .logo-container {
+            margin-bottom: 20px;
+            animation: fadeInDown 0.8s ease-out;
+            position: relative;
+            filter: drop-shadow(0 0 30px rgba(0, 255, 255, 0.6));
+        }
+
+        .logo {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+            /* 🔥 改為正 10 邊形 */
+            clip-path: polygon(
+                50% 0%, 
+                80.9% 9.5%, 
+                97.6% 34.5%, 
+                97.6% 65.5%, 
+                80.9% 90.5%, 
+                50% 100%, 
+                19.1% 90.5%, 
+                2.4% 65.5%, 
+                2.4% 34.5%, 
+                19.1% 9.5%
+            );
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            animation: float 6s ease-in-out infinite, rotate3D 20s linear infinite;
+        }
+
+        .logo:hover {
+            transform: scale(1.15);
+            filter: drop-shadow(0 0 50px rgba(0, 255, 255, 1));
+        }
+
+        @keyframes float {
+            0%, 100% { transform: translateY(0px); }
+            50% { transform: translateY(-15px); }
+        }
+
+        @keyframes rotate3D {
+            0% { transform: rotateY(0deg); }
+            100% { transform: rotateY(360deg); }
+        }
+
+        /* 標題 - 霓虹科技字體 */
+        .title {
+            font-family: 'Orbitron', 'Rajdhani', sans-serif;
+            font-size: 4rem;
+            font-weight: 900;
+            color: #00ffff;
+            text-align: center;
+            margin-bottom: 40px;
+            letter-spacing: 8px;
+            text-transform: uppercase;
+            text-shadow: 
+                0 0 10px rgba(0, 255, 255, 0.8),
+                0 0 20px rgba(0, 255, 255, 0.6),
+                0 0 30px rgba(0, 255, 255, 0.4),
+                0 0 40px rgba(0, 100, 255, 0.3);
+            animation: fadeInDown 0.8s ease-out 0.2s both, 
+                       neonPulse 2s ease-in-out infinite alternate;
+            position: relative;
+        }
+
+        /* 標題下方科技線條 */
+        .title::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60%;
+            height: 2px;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                #00ffff 50%, 
+                transparent 100%);
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+        }
+
+        @keyframes neonPulse {
+            from { 
+                text-shadow: 
+                    0 0 10px rgba(0, 255, 255, 0.8),
+                    0 0 20px rgba(0, 255, 255, 0.6),
+                    0 0 30px rgba(0, 255, 255, 0.4);
+            }
+            to { 
+                text-shadow: 
+                    0 0 20px rgba(0, 255, 255, 1),
+                    0 0 30px rgba(0, 255, 255, 0.8),
+                    0 0 40px rgba(0, 255, 255, 0.6),
+                    0 0 50px rgba(0, 100, 255, 0.4);
+            }
+        }
+
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 主容器 - 科技感邊框 */
+        .main-container {
+            background: rgba(10, 14, 39, 0.85);
+            backdrop-filter: blur(10px);
+            border-radius: 0;
+            padding: 40px;
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            box-shadow: 
+                0 0 20px rgba(0, 255, 255, 0.2),
+                inset 0 0 30px rgba(0, 255, 255, 0.05);
+            max-width: 1400px;
+            width: 100%;
+            animation: fadeInUp 0.8s ease-out 0.4s both;
+            position: relative;
+            overflow: hidden;
+            clip-path: polygon(
+                0 0, 
+                calc(100% - 20px) 0, 
+                100% 20px, 
+                100% 100%, 
+                20px 100%, 
+                0 calc(100% - 20px)
+            );
+        }
+
+        /* 容器四角科技裝飾 */
+        .main-container::before,
+        .main-container::after {
+            content: '';
+            position: absolute;
+            width: 40px;
+            height: 40px;
+            border: 2px solid #00ffff;
+            box-shadow: 0 0 10px rgba(0, 255, 255, 0.6);
+        }
+
+        .main-container::before {
+            top: 10px;
+            left: 10px;
+            border-right: none;
+            border-bottom: none;
+        }
+
+        .main-container::after {
+            bottom: 10px;
+            right: 10px;
+            border-left: none;
+            border-top: none;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(50px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* PC 版 - 統一高度 200px 的網格佈局 */
+        .apps-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            grid-auto-rows: 200px;
+            gap: 20px;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .app-item:nth-child(1) {
+            grid-column: span 1;
+            grid-row: span 1;
+        }
+
+        .app-item:nth-child(5) {
+            grid-column: span 1;
+        }
+
+        /* 3D 翻轉卡片 - 原地翻轉不遮蔽 */
+        .app-item {
+            perspective: 1000px;
+            cursor: pointer;
+            position: relative;
+            text-decoration: none;
+            transition: transform 0.3s ease;
+            z-index: 1;
+            isolation: isolate;
+        }
+
+        .app-item:hover {
+            z-index: 10;
+        }
+
+        .app-card {
+            width: 100%;
+            height: 100%;
+            position: relative;
+            transform-style: flat;
+            transition: transform 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* PC 版翻轉效果 */
+        @media (min-width: 769px) {
+            .app-item:hover .app-card {
+                transform: rotateY(180deg);
+            }
+        }
+
+        /* 卡片正面 - 科技感設計 */
+        .card-front, .card-back {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            backface-visibility: hidden;
+            border-radius: 0;
+            overflow: hidden;
+            transform-style: flat;
+        }
+
+        .card-front {
+            background: rgba(15, 20, 45, 0.9);
+            border: 2px solid rgba(0, 255, 255, 0.3);
+            box-shadow: 
+                0 0 20px rgba(0, 255, 255, 0.2),
+                inset 0 0 30px rgba(0, 255, 255, 0.05);
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            padding: 25px;
+            transition: all 0.3s ease;
+            clip-path: polygon(
+                0 0, 
+                calc(100% - 15px) 0, 
+                100% 15px, 
+                100% 100%, 
+                15px 100%, 
+                0 calc(100% - 15px)
+            );
+            position: relative;
+            z-index: 2;
+        }
+
+        /* 卡片掃描線效果 */
+        .card-front::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, 
+                transparent 0%, 
+                rgba(0, 255, 255, 0.1) 50%, 
+                transparent 100%);
+            transition: left 0.5s ease;
+        }
+
+        .app-item:hover .card-front::before {
+            left: 100%;
+        }
+
+        .app-item:hover .card-front {
+            border-color: rgba(0, 255, 255, 0.6);
+            box-shadow: 
+                0 0 30px rgba(0, 255, 255, 0.4),
+                inset 0 0 40px rgba(0, 255, 255, 0.1);
+        }
+
+        /* 卡片背面 - 霓虹漸變 */
+        .card-back {
+            background: linear-gradient(135deg, 
+                rgba(0, 100, 255, 0.9) 0%, 
+                rgba(0, 255, 255, 0.9) 100%);
+            border: 2px solid rgba(0, 255, 255, 0.5);
+            transform: rotateY(180deg);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 25px;
+            color: white;
+            clip-path: polygon(
+                0 0, 
+                calc(100% - 15px) 0, 
+                100% 15px, 
+                100% 100%, 
+                15px 100%, 
+                0 calc(100% - 15px)
+            );
+            z-index: 1;
+        }
+
+        .card-back-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 12px;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .card-back-desc {
+            font-size: 0.9rem;
+            text-align: center;
+            opacity: 0.9;
+            line-height: 1.5;
+        }
+
+        .card-back-action {
+            margin-top: 18px;
+            padding: 10px 25px;
+            background: white;
+            color: #0064ff;
+            border-radius: 0;
+            font-weight: 700;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            clip-path: polygon(5px 0, 100% 0, 100% calc(100% - 5px), calc(100% - 5px) 100%, 0 100%, 0 5px);
+        }
+
+        .card-back-action:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.5);
+        }
+
+        /* 🔥 圖標容器 - 正 10 邊形邊框 */
+        .app-icon-wrapper {
+            width: 150px;
+            height: 150px;
+            flex-shrink: 0;
+            margin-right: 15px;
+            position: relative;
+        }
+
+        .app-icon {
+            width: 100%;
+            height: 100%;
+            border-radius: 0;
+            background: linear-gradient(135deg, #0064ff 0%, #00ffff 100%);
+            padding: 3px;
+            box-shadow: 
+                0 0 20px rgba(0, 255, 255, 0.4),
+                inset 0 0 20px rgba(0, 255, 255, 0.2);
+            transition: all 0.3s ease;
+            /* 🔥 改為正 10 邊形 */
+            clip-path: polygon(
+                50% 0%, 
+                80.9% 9.5%, 
+                97.6% 34.5%, 
+                97.6% 65.5%, 
+                80.9% 90.5%, 
+                50% 100%, 
+                19.1% 90.5%, 
+                2.4% 65.5%, 
+                2.4% 34.5%, 
+                19.1% 9.5%
+            );
+        }
+
+        .app-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            background: #0a0e27;
+            /* 🔥 改為正 10 邊形 */
+            clip-path: polygon(
+                50% 0%, 
+                80.9% 9.5%, 
+                97.6% 34.5%, 
+                97.6% 65.5%, 
+                80.9% 90.5%, 
+                50% 100%, 
+                19.1% 90.5%, 
+                2.4% 65.5%, 
+                2.4% 34.5%, 
+                19.1% 9.5%
+            );
+        }
+
+        /* 文字區域 */
+        .app-text-wrapper {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            text-align: left;
+            min-width: 0;
+        }
+
+        .app-name {
+            font-family: 'Orbitron', 'Rajdhani', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 900;
+            color: #00ffff;
+            text-shadow: 
+                0 0 10px rgba(0, 255, 255, 0.8),
+                0 0 20px rgba(0, 255, 255, 0.4);
+            margin-bottom: 8px;
+            line-height: 1.3;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .app-desc {
+            font-size: 0.9rem;
+            font-weight: 400;
+            color: rgba(0, 255, 255, 0.7);
+            line-height: 1.5;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+        }
+
+        /* 磁吸效果 */
+        .app-item {
+            --magnetic-x: 0;
+            --magnetic-y: 0;
+        }
+
+        .app-item.magnetic-active {
+            transform: translate(var(--magnetic-x), var(--magnetic-y)) scale(1.02);
+        }
+
+        /* 長按詳情彈窗 - 科技風 */
+        .detail-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .detail-modal.show {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .detail-content {
+            background: linear-gradient(135deg, 
+                rgba(0, 100, 255, 0.95) 0%, 
+                rgba(0, 255, 255, 0.95) 100%);
+            backdrop-filter: blur(20px);
+            border-radius: 0;
+            padding: 40px;
+            max-width: 90%;
+            width: 400px;
+            color: white;
+            text-align: center;
+            transform: scale(0.8);
+            transition: transform 0.3s ease;
+            border: 2px solid rgba(0, 255, 255, 0.5);
+            box-shadow: 0 0 40px rgba(0, 255, 255, 0.6);
+            clip-path: polygon(
+                0 0, 
+                calc(100% - 20px) 0, 
+                100% 20px, 
+                100% 100%, 
+                20px 100%, 
+                0 calc(100% - 20px)
+            );
+        }
+
+        .detail-modal.show .detail-content {
+            transform: scale(1);
+        }
+
+        /* 🔥 彈窗圖標 - 正 10 邊形 */
+        .detail-icon {
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 20px;
+            border-radius: 0;
+            overflow: hidden;
+            box-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            /* 🔥 改為正 10 邊形 */
+            clip-path: polygon(
+                50% 0%, 
+                80.9% 9.5%, 
+                97.6% 34.5%, 
+                97.6% 65.5%, 
+                80.9% 90.5%, 
+                50% 100%, 
+                19.1% 90.5%, 
+                2.4% 65.5%, 
+                2.4% 34.5%, 
+                19.1% 9.5%
+            );
+        }
+
+        .detail-icon img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .detail-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .detail-desc {
+            font-size: 1rem;
+            line-height: 1.6;
+            opacity: 0.9;
+            margin-bottom: 25px;
+        }
+
+        .detail-buttons {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+        }
+
+        .detail-button {
+            padding: 12px 30px;
+            border-radius: 0;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: none;
+            font-family: 'Rajdhani', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            clip-path: polygon(5px 0, 100% 0, 100% calc(100% - 5px), calc(100% - 5px) 100%, 0 100%, 0 5px);
+        }
+
+        .detail-button.primary {
+            background: white;
+            color: #0064ff;
+        }
+
+        .detail-button.secondary {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.5);
+        }
+
+        .detail-button:active {
+            transform: scale(0.95);
+        }
+
+        /* PWA 安裝提示 - 科技風 */
+        .install-prompt {
+            position: fixed;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%) translateY(150px);
+            background: rgba(10, 14, 39, 0.95);
+            backdrop-filter: blur(20px);
+            border: 2px solid rgba(0, 255, 255, 0.5);
+            color: #00ffff;
+            padding: 18px 35px;
+            border-radius: 0;
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.4);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            z-index: 1000;
+            opacity: 0;
+            pointer-events: none;
+            clip-path: polygon(10px 0, 100% 0, 100% calc(100% - 10px), calc(100% - 10px) 100%, 0 100%, 0 10px);
+        }
+
+        .install-prompt.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+            pointer-events: auto;
+        }
+
+        .install-prompt button {
+            background: linear-gradient(135deg, #0064ff 0%, #00ffff 100%);
+            color: white;
+            border: none;
+            padding: 10px 25px;
+            border-radius: 0;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Rajdhani', sans-serif;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.4);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            clip-path: polygon(5px 0, 100% 0, 100% calc(100% - 5px), calc(100% - 5px) 100%, 0 100%, 0 5px);
+        }
+
+        .install-prompt button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 30px rgba(0, 255, 255, 0.6);
+        }
+
+        /* ==================== 手機版樣式 ==================== */
+        @media (max-width: 768px) {
+            body {
+                padding: 15px;
+            }
+
+            .title {
+                font-size: 2.5rem;
+                letter-spacing: 4px;
+                margin-bottom: 25px;
+            }
+
+            .logo {
+                width: 90px;
+                height: 90px;
+            }
+
+            .main-container {
+                padding: 25px 15px;
+            }
+
+            .apps-grid {
+                display: flex;
+                flex-direction: column;
+                gap: 20px;
+                padding: 15px 5px;
+            }
+
+            .app-item {
+                width: 100%;
+                height: 160px;
+                perspective: none;
+            }
+
+            .card-front {
+                padding: 20px;
+            }
+
+            .app-icon-wrapper {
+                width: 120px;
+                height: 120px;
+                margin-right: 15px;
+            }
+
+            .app-name {
+                font-size: 1.2rem;
+            }
+
+            .app-desc {
+                font-size: 0.85rem;
+                -webkit-line-clamp: 2;
+            }
+
+            .app-card {
+                transform: none !important;
+            }
+
+            .card-back {
+                display: none;
+            }
+
+            .app-item:active {
+                transform: scale(0.98);
+            }
+
+            .detail-content {
+                padding: 30px 25px;
+                width: 85%;
+            }
+
+            .detail-icon {
+                width: 80px;
+                height: 80px;
+            }
+
+            .detail-title {
+                font-size: 1.5rem;
+            }
+
+            .detail-desc {
+                font-size: 0.9rem;
+            }
+
+            .detail-buttons {
+                flex-direction: column;
+                gap: 10px;
+            }
+
+            .detail-button {
+                width: 100%;
+            }
+
+            .install-prompt {
+                bottom: 20px;
+                padding: 15px 25px;
+                font-size: 0.9rem;
+                max-width: 90%;
+            }
+
+            .install-prompt button {
+                padding: 8px 20px;
+                font-size: 0.85rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .title {
+                font-size: 2rem;
+                letter-spacing: 2px;
+            }
+
+            .logo {
+                width: 75px;
+                height: 75px;
+            }
+
+            .main-container {
+                padding: 20px 12px;
+            }
+
+            .apps-grid {
+                gap: 15px;
+            }
+
+            .app-item {
+                height: 140px;
+            }
+
+            .app-icon-wrapper {
+                width: 100px;
+                height: 100px;
+            }
+
+            .app-name {
+                font-size: 1.1rem;
+            }
+
+            .app-desc {
+                font-size: 0.8rem;
+            }
+        }
+
+        /* 平板版 */
+        @media (min-width: 769px) and (max-width: 1200px) {
+            .apps-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- 數位粒子背景 -->
+    <canvas id="particleCanvas"></canvas>
+
+    <!-- 內容容器 -->
+    <div class="content-wrapper">
+        <!-- Logo -->
+        <div class="logo-container">
+            <img src="R0.png" alt="昶青集團 Logo" class="logo">
+        </div>
+
+        <!-- 標題 -->
+        <h1 class="title">昶青集團應用程式入口<br>GAI驅動智慧管理平台</h1>
+
+        <!-- 主容器 -->
+        <div class="main-container">
+            <div class="apps-grid" id="appsGrid"></div>
+        </div>
+    </div>
+
+    <!-- 長按詳情彈窗 -->
+    <div class="detail-modal" id="detailModal">
+        <div class="detail-content">
+            <div class="detail-icon" id="detailIcon"></div>
+            <div class="detail-title" id="detailTitle"></div>
+            <div class="detail-desc" id="detailDesc"></div>
+            <div class="detail-buttons">
+                <button class="detail-button primary" id="detailOpen">立即開啟</button>
+                <button class="detail-button secondary" id="detailClose">關閉</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- PWA 安裝提示 -->
+    <div class="install-prompt" id="installPrompt">
+        <span id="installText">📱 將 AI-GATE 加入主畫面</span>
+        <button id="installButton">安裝</button>
+    </div>
+
+    <script>
+        // JavaScript 保持不變（與之前相同）
+        const apps = [
+            { 
+                name: 'GAI數位資料中心<br>【Willion】', 
+                icon: 'app1.png', 
+                url: 'https://tcc-ai.github.io/digidata/',
+                desc: '智能數位資料與管理平台，提供即時文件查閱與視覺化報表'
+            },
+            { 
+                name: 'GAI風控管理中心<br>【Tina】', 
+                icon: 'app2.png', 
+                url: 'https://tcc-ai.github.io/Risk/',
+                desc: '即時風險監控與預警系統，保障企業營運安全'
+            },
+            { 
+                name: 'GAI路徑規劃中心<br>【Lisa】', 
+                icon: 'app3.png', 
+                url: 'https://tcc-ai.github.io/GAIRoute/',
+                desc: '智能物流路線優化，降低運輸成本提升效率'
+            },
+            { 
+                name: 'GAI排派車中心<br>【Lisa】', 
+                icon: 'app3.png', 
+                url: 'https://tcc-ai.github.io/GAITransporter/',
+                desc: '自動化車輛調度系統，實現智能派車管理'
+            },
+            { 
+                name: 'GAI智慧庫存中心<br>【Elon】', 
+                icon: 'app4.png', 
+                url: 'https://tcc-ai.github.io/GAIstock/',
+                desc: '智能庫存預測與管理，優化庫存週轉率'
+            },
+            { 
+                name: 'GAI智能職訓中心<br>【Sophia】', 
+                icon: 'app5.png', 
+                url: 'https://tcc-ai.github.io/TRAIN/',
+                desc: '個性化員工培訓平台，提升團隊專業能力'
+            },
+            { 
+                name: 'GAI智能資產設備中心<br>【Emma】', 
+                icon: 'app7.png', 
+                url: 'https://tcc-ai.github.io/Equipments/',
+                desc: '更多創新功能即將推出，敬請期待'
+            },
+            { 
+                name: '應用程式 8', 
+                icon: 'app8.png', 
+                url: 'https://example.com/app8',
+                desc: '更多創新功能即將推出，敬請期待'
+            },
+            { 
+                name: '應用程式 9', 
+                icon: 'app9.png', 
+                url: 'https://example.com/app9',
+                desc: '更多創新功能即將推出，敬請期待'
+            },
+            { 
+                name: '應用程式 10', 
+                icon: 'app10.png', 
+                url: 'https://example.com/app10',
+                desc: '更多創新功能即將推出，敬請期待'
+            }
+        ];
+
+        function renderApps() {
+            const grid = document.getElementById('appsGrid');
+            grid.innerHTML = '';
+
+            apps.forEach((app, index) => {
+                const appItem = document.createElement('div');
+                appItem.className = 'app-item';
+                appItem.dataset.url = app.url;
+                appItem.dataset.name = app.name;
+                appItem.dataset.desc = app.desc;
+                appItem.dataset.icon = app.icon;
+                appItem.style.animationDelay = `${index * 0.05}s`;
+
+                appItem.innerHTML = `
+                    <div class="app-card">
+                        <div class="card-front">
+                            <div class="app-icon-wrapper">
+                                <div class="app-icon">
+                                    <img src="${app.icon}" alt="${app.name}" onerror="this.parentElement.innerHTML='<div style=\\'display:flex;align-items:center;justify-content:center;height:100%;font-size:3rem;color:#00ffff;\\'>⚡</div>'">
+                                </div>
+                            </div>
+                            <div class="app-text-wrapper">
+                                <div class="app-name">${app.name}</div>
+                                <div class="app-desc">${app.desc}</div>
+                            </div>
+                        </div>
+                        <div class="card-back">
+                            <div class="card-back-title">${app.name}</div>
+                            <div class="card-back-desc">${app.desc}</div>
+                            <div class="card-back-action">立即開啟 →</div>
+                        </div>
+                    </div>
+                `;
+
+                grid.appendChild(appItem);
+            });
+
+            if (window.innerWidth > 768) {
+                initMagneticEffect();
+            }
+            initTouchEvents();
+        }
+
+        function initTouchEvents() {
+            const appItems = document.querySelectorAll('.app-item');
+            const detailModal = document.getElementById('detailModal');
+            const detailIcon = document.getElementById('detailIcon');
+            const detailTitle = document.getElementById('detailTitle');
+            const detailDesc = document.getElementById('detailDesc');
+            const detailOpen = document.getElementById('detailOpen');
+            const detailClose = document.getElementById('detailClose');
+
+            let longPressTimer;
+            let currentUrl = '';
+
+            appItems.forEach(item => {
+                item.addEventListener('click', function(e) {
+                    if (window.innerWidth <= 768) {
+                        e.preventDefault();
+                        window.open(this.dataset.url, '_blank', 'noopener,noreferrer');
+                    } else {
+                        window.open(this.dataset.url, '_blank', 'noopener,noreferrer');
+                    }
+                });
+
+                if (window.innerWidth <= 768) {
+                    item.addEventListener('touchstart', function(e) {
+                        longPressTimer = setTimeout(() => {
+                            e.preventDefault();
+                            currentUrl = this.dataset.url;
+                            
+                            detailIcon.innerHTML = `<img src="${this.dataset.icon}" alt="${this.dataset.name}">`;
+                            detailTitle.textContent = this.dataset.name;
+                            detailDesc.textContent = this.dataset.desc;
+                            
+                            detailModal.classList.add('show');
+                            
+                            if (navigator.vibrate) {
+                                navigator.vibrate(50);
+                            }
+                        }, 500);
+                    });
+
+                    item.addEventListener('touchend', function() {
+                        clearTimeout(longPressTimer);
+                    });
+
+                    item.addEventListener('touchmove', function() {
+                        clearTimeout(longPressTimer);
+                    });
+                }
+            });
+
+            detailOpen.addEventListener('click', () => {
+                window.open(currentUrl, '_blank', 'noopener,noreferrer');
+                detailModal.classList.remove('show');
+            });
+
+            detailClose.addEventListener('click', () => {
+                detailModal.classList.remove('show');
+            });
+
+            detailModal.addEventListener('click', (e) => {
+                if (e.target === detailModal) {
+                    detailModal.classList.remove('show');
+                }
+            });
+        }
+
+        function initMagneticEffect() {
+            const appItems = document.querySelectorAll('.app-item');
+
+            appItems.forEach(item => {
+                item.addEventListener('mouseenter', function() {
+                    this.classList.add('magnetic-active');
+                });
+
+                item.addEventListener('mouseleave', function() {
+                    this.classList.remove('magnetic-active');
+                    this.style.setProperty('--magnetic-x', '0px');
+                    this.style.setProperty('--magnetic-y', '0px');
+                });
+
+                item.addEventListener('mousemove', function(e) {
+                    if (!this.classList.contains('magnetic-active')) return;
+
+                    const rect = this.getBoundingClientRect();
+                    const itemCenterX = rect.left + rect.width / 2;
+                    const itemCenterY = rect.top + rect.height / 2;
+                    
+                    const deltaX = e.clientX - itemCenterX;
+                    const deltaY = e.clientY - itemCenterY;
+                    
+                    const magneticX = Math.max(-15, Math.min(15, deltaX * 0.1));
+                    const magneticY = Math.max(-15, Math.min(15, deltaY * 0.1));
+                    
+                    this.style.setProperty('--magnetic-x', `${magneticX}px`);
+                    this.style.setProperty('--magnetic-y', `${magneticY}px`);
+                });
+            });
+        }
+
+        class ParticleSystem {
+            constructor() {
+                this.canvas = document.getElementById('particleCanvas');
+                this.ctx = this.canvas.getContext('2d');
+                this.particles = [];
+                this.particleCount = window.innerWidth < 768 ? 40 : 80;
+                this.maxDistance = 150;
+                
+                this.resize();
+                this.init();
+                this.animate();
+                
+                window.addEventListener('resize', () => this.resize());
+            }
+
+            resize() {
+                this.canvas.width = window.innerWidth;
+                this.canvas.height = window.innerHeight;
+            }
+
+            init() {
+                this.particles = [];
+                for (let i = 0; i < this.particleCount; i++) {
+                    this.particles.push({
+                        x: Math.random() * this.canvas.width,
+                        y: Math.random() * this.canvas.height,
+                        vx: (Math.random() - 0.5) * 0.8,
+                        vy: (Math.random() - 0.5) * 0.8,
+                        radius: Math.random() * 2 + 1
+                    });
+                }
+            }
+
+            update() {
+                this.particles.forEach(particle => {
+                    particle.x += particle.vx;
+                    particle.y += particle.vy;
+
+                    if (particle.x < 0 || particle.x > this.canvas.width) particle.vx *= -1;
+                    if (particle.y < 0 || particle.y > this.canvas.height) particle.vy *= -1;
+                });
+            }
+
+            draw() {
+                this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
+
+                this.particles.forEach(particle => {
+                    this.ctx.beginPath();
+                    this.ctx.arc(particle.x, particle.y, particle.radius, 0, Math.PI * 2);
+                    this.ctx.fillStyle = 'rgba(0, 255, 255, 0.8)';
+                    this.ctx.shadowBlur = 10;
+                    this.ctx.shadowColor = 'rgba(0, 255, 255, 0.8)';
+                    this.ctx.fill();
+                    this.ctx.shadowBlur = 0;
+                });
+
+                for (let i = 0; i < this.particles.length; i++) {
+                    for (let j = i + 1; j < this.particles.length; j++) {
+                        const dx = this.particles[i].x - this.particles[j].x;
+                        const dy = this.particles[i].y - this.particles[j].y;
+                        const distance = Math.sqrt(dx * dx + dy * dy);
+
+                        if (distance < this.maxDistance) {
+                            const opacity = 1 - (distance / this.maxDistance);
+                            this.ctx.beginPath();
+                            this.ctx.strokeStyle = `rgba(0, 255, 255, ${opacity * 0.5})`;
+                            this.ctx.lineWidth = 1;
+                            this.ctx.moveTo(this.particles[i].x, this.particles[i].y);
+                            this.ctx.lineTo(this.particles[j].x, this.particles[j].y);
+                            this.ctx.stroke();
+                        }
+                    }
+                }
+            }
+
+            animate() {
+                this.update();
+                this.draw();
+                requestAnimationFrame(() => this.animate());
+            }
+        }
+
+        function isIOS() {
+            return /iPhone|iPad|iPod/i.test(navigator.userAgent);
+        }
+
+        function isStandalone() {
+            return window.matchMedia('(display-mode: standalone)').matches || 
+                   window.navigator.standalone === true;
+        }
+
+        let deferredPrompt;
+        const installPrompt = document.getElementById('installPrompt');
+        const installButton = document.getElementById('installButton');
+        const installText = document.getElementById('installText');
+
+        function hideInstallPrompt() {
+            installPrompt.classList.remove('show');
+            localStorage.setItem('installPromptClosed', 'true');
+        }
+
+        function showInstallPrompt() {
+            installPrompt.classList.add('show');
+        }
+
+        function showIOSInstallGuide() {
+            installText.innerHTML = '📱 點擊 <strong>分享 📤</strong> → <strong>加入主畫面</strong>';
+            installButton.textContent = '知道了';
+            
+            const newButton = installButton.cloneNode(true);
+            installButton.parentNode.replaceChild(newButton, installButton);
+            
+            document.getElementById('installButton').addEventListener('click', (e) => {
+                e.preventDefault();
+                hideInstallPrompt();
+            });
+            
+            showInstallPrompt();
+        }
+
+        window.addEventListener('beforeinstallprompt', (e) => {
+            e.preventDefault();
+            deferredPrompt = e;
+            
+            const promptClosed = localStorage.getItem('installPromptClosed');
+            if (!isIOS() && !isStandalone() && promptClosed !== 'true') {
+                showInstallPrompt();
+            }
+        });
+
+        installButton.addEventListener('click', async (e) => {
+            e.preventDefault();
+            
+            if (!deferredPrompt) return;
+
+            deferredPrompt.prompt();
+            const { outcome } = await deferredPrompt.userChoice;
+            
+            deferredPrompt = null;
+            hideInstallPrompt();
+        });
+
+        window.addEventListener('appinstalled', () => {
+            hideInstallPrompt();
+        });
+
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                const swCode = `
+                    const CACHE_NAME = 'ai-gate-v1';
+                    const urlsToCache = [
+                        '/',
+                        '/R0.png'
+                    ];
+
+                    self.addEventListener('install', (event) => {
+                        event.waitUntil(
+                            caches.open(CACHE_NAME)
+                                .then(cache => cache.addAll(urlsToCache))
+                        );
+                        self.skipWaiting();
+                    });
+
+                    self.addEventListener('activate', (event) => {
+                        event.waitUntil(self.clients.claim());
+                    });
+
+                    self.addEventListener('fetch', (event) => {
+                        event.respondWith(
+                            caches.match(event.request)
+                                .then(response => response || fetch(event.request))
+                        );
+                    });
+                `;
+
+                const blob = new Blob([swCode], { type: 'application/javascript' });
+                const swUrl = URL.createObjectURL(blob);
+
+                navigator.serviceWorker.register(swUrl)
+                    .then(reg => console.log('✅ Service Worker 註冊成功', reg))
+                    .catch(err => console.log('❌ Service Worker 註冊失敗', err));
+            });
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderApps();
+            new ParticleSystem();
+            
+            if (isStandalone()) return;
+
+            const promptClosed = localStorage.getItem('installPromptClosed');
+            if (promptClosed === 'true') return;
+
+            if (isIOS()) {
+                setTimeout(() => showIOSInstallGuide(), 2000);
+            }
+        });
+
+        document.addEventListener('dragstart', (e) => {
+            if (e.target.tagName === 'IMG') {
+                e.preventDefault();
+            }
+        });
+
+        window.addEventListener('resize', () => {
+            const appItems = document.querySelectorAll('.app-item');
+            appItems.forEach(item => {
+                item.classList.remove('magnetic-active');
+                item.style.setProperty('--magnetic-x', '0px');
+                item.style.setProperty('--magnetic-y', '0px');
+            });
+        });
+    </script>
+</body>
+</html>
